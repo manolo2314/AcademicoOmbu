@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+
+        <title>OMBUGAMES Estudiante</title>
+        <style type="text/css">
+            .ui-widget,
+            .ui-widget .ui-widget
+            {
+                font-size: 85% !important;
+            }
+        </style>
+        <script type="text/javascript" src="../js/calendarES.js"/>
+
+    </h:head>
+    <h:body onload="#{menuLectivoController.reloadSession()}">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="80">  
+                <div style=" border:0; width: 100%; height: 100%; background-image: url(../images/logo.jpg); background-position:  center; background-repeat: no-repeat; background-size: 70px 70px;"  
+                     class="ui-widget-content ui-corner-all">  
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:outputLabel  value="UNIDAD EDUCATIVA CARLOS CISNEROS"/>
+                            <h:outputLabel  value="-------------------------------------------------------"/>
+                            <h:outputLabel  value="BIENVENID@: #{loginBean.loggedUserNombre}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:form id="logoutFrm" >
+                                <p:commandButton   ajax="false" id="logout" value="Salir" actionListener="#{loginBean.doLogout}" oncomplete="logout(xhr, status, args)" icon="ui-icon-power"/>
+                            </h:form>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30" >
+                <h:outputText style="margin-left: 50%" value="Developed By: OMBUGAMES CIA LTDA. All rights reserved &#169;2016" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Menú Principal" resizable="true" collapsible="true">
+                <h:form id="frmMenu" >
+                    <p:menu style="width:200px;  ">
+                        <p:submenu label="Administración">
+                            <p:menuitem value="Inicio" action="#{menuLectivoController.goToIndex}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                            <p:menuitem value="Año Lectivo" action="#{menuLectivoController.goToAnoLectivo}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />
+                            <p:menuitem value="Asignatura" action="#{menuLectivoController.goToAsignatura}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Docente" action="#{menuLectivoController.goToDocente}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Estudiante" action="#{menuLectivoController.goToEstudiante}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Evaluación" action="#{menuLectivoController.goToEvaluacion}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />  
+                            <p:menuitem value="Nivel" action="#{menuLectivoController.goToNivel}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Sección" action="#{menuLectivoController.goToSeccion()}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            
+                        </p:submenu>  
+                        <p:submenu label="Distribución">
+                            <p:menuitem value="Crear Distribución" action="#{menuLectivoController.goToRelacionPaquete}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                        <p:submenu label="Matrícula">
+                            <p:menuitem value="Crear Matrícula" action="#{menuLectivoController.goToRelacionMatricula}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+
+                <h:form id="frmIngreso">
+                    <p:growl id="growl1" showDetail="true" sticky="true" /> 
+                    <p:panel header="ESTUDIANTE">
+                        <p:fieldset legend="Nuevo"  >
+                            <h:panelGrid columns="6" style="border: hidden; font-size: 12px" >
+                                <p:outputLabel value="Ci: "/>
+                                <p:inputText id="ci" value="#{estudianteController.actualEstudiante.ci}" style="width: 200px"/>
+
+                                <p:outputLabel value="Apellido: "/>
+                                <p:inputText id="apellido" value="#{estudianteController.actualEstudiante.apellido}" style="width: 200px"/>
+
+                                <p:outputLabel value="Nombre:"/>
+                                <p:inputText id="nombre" value="#{estudianteController.actualEstudiante.nombre}" style="width: 200px"/>
+
+                                <p:outputLabel value="Teléfono: "/>
+                                <p:inputText id="telefono" value="#{estudianteController.actualEstudiante.telefono}" style="width: 200px"/>
+
+                                <p:outputLabel value="Dirección: "/>
+                                <p:inputText id="direccion" value="#{estudianteController.actualEstudiante.direccion}" style="width: 200px"/>
+
+                                <p:outputLabel value="Email: "/>
+                                <p:inputText id="email" value="#{estudianteController.actualEstudiante.email}" style="width: 200px"/>
+
+
+                                <p:outputLabel value="Fecha Nacimiento"/>                                
+                                <p:calendar id="german" value="#{estudianteController.actualEstudiante.fechaNacimiento}" locale="es" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+
+
+                            </h:panelGrid>
+
+                        </p:fieldset>
+                    </p:panel>
+
+                    <p:fieldset legend="Representante">
+
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGroup style="width: 50%">
+                                <h:panelGrid columns="1">
+                                    <p:dataTable style="width: 80%; margin: auto" var="tablerep" value="#{estudianteController.representanteModel}"
+                                                 emptyMessage="No existen datos" filteredValue="#{estudianteController.filterRepresentante}" paginator="true" rows="10"
+                                                 selection="#{estudianteController.selectedRepresentante}" selectionMode="single" widgetVar="Tablerep">
+
+                                        <p:ajax event="rowSelect" update=":frmIngreso:actualRepres" listener="#{estudianteController.selectRepresentanteExistente}" />
+
+                                        <p:columnGroup type="header">
+
+                                            <p:row>
+                                                <p:column headerText="CI" filterBy="#{tablerep.ci}" filterMatchMode="contains"/>                                                                              
+
+                                                <p:column headerText="Apellido" filterBy="#{tablerep.apellido}" filterMatchMode="contains"/>                                                                              
+
+                                                <p:column headerText="Nombre" filterBy="#{tablerep.nombre}" filterMatchMode="contains"/>                                                                                                                                                                                                          
+                                            </p:row>
+                                        </p:columnGroup>
+
+                                        <p:column >
+                                            <h:outputText value="#{tablerep.ci}" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:outputText value="#{tablerep.apellido}" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:outputText value="#{tablerep.nombre}" />
+                                        </p:column>                                        
+                                    </p:dataTable>
+                                </h:panelGrid>
+
+                            </h:panelGroup>
+
+                            <h:panelGroup id="actualRepres" style="width: 50%">
+                                <h:panelGrid columns="4" >
+                                    <p:outputLabel value="Ci: "/>
+                                    <p:inputText id="cirep" value="#{estudianteController.actualRepresentante.ci}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Parentesco "/>
+                                    <p:inputText id="parentescorep" value="#{estudianteController.actualRepresentante.parentesco}" style="width: 200px"/>                                
+
+                                    <p:outputLabel value="Apellido: "/>
+                                    <p:inputText id="apellidorep" value="#{estudianteController.actualRepresentante.apellido}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Nombre:"/>
+                                    <p:inputText id="nombrerep" value="#{estudianteController.actualRepresentante.nombre}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Teléfono: "/>
+                                    <p:inputText id="telefonorep" value="#{estudianteController.actualRepresentante.telefono}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Dirección: "/>
+                                    <p:inputText id="direccionrep" value="#{estudianteController.actualRepresentante.direccion}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Email: "/>
+                                    <p:inputText id="emailrep" value="#{estudianteController.actualRepresentante.email}" style="width: 200px"/>
+
+
+                                </h:panelGrid>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                    </p:fieldset>
+                    <br/>
+                    <h:panelGroup >
+                        <p:commandButton style="margin-left: 20px"  value="Guardar" actionListener="#{estudianteController.guardarEstudiante}"
+                                         update=":frmIngreso"/>
+                    </h:panelGroup>
+                    <br/>
+                    <br/>
+                    <p:panel id="pnlIngresados" header="Estudiantes Existentes">
+                        <p:dataTable style="width: 80%; margin: auto" var="table" value="#{estudianteController.estudianteModel}"
+                                     emptyMessage="No existen datos" filteredValue="#{estudianteController.fiterEstudiante}" paginator="true" rows="10"
+                                     selection="#{estudianteController.selectedEstudiante}" selectionMode="single" widgetVar="Table">
+
+                            <p:ajax event="rowSelect" update=":frmUpdate:display" oncomplete="PF('msmDialog').show()" listener="#{estudianteController.loadRepresentanteEstudiante}" />
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column colspan="4" headerText="Dar clic en el Estudiante para Modificarlo"/>
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="CI" filterBy="#{table.ci}" filterMatchMode="contains"/>                                                                              
+
+                                    <p:column headerText="Apellido" filterBy="#{table.apellido}" filterMatchMode="contains"/>                                                                              
+
+                                    <p:column headerText="Nombre" filterBy="#{table.nombre}" filterMatchMode="contains"/>                                                                              
+
+                                    <p:column headerText="Teléfono" filterBy="#{table.telefono}" filterMatchMode="contains"/>                                                                              
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column >
+                                <h:outputText value="#{table.ci}" />
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{table.apellido}" />
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{table.nombre}" />
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{table.telefono}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+
+                </h:form>
+
+
+                <h:form id="frmUpdate">
+                    <p:dialog id="msmDialog" header="DOCENTE" widgetVar="msmDialog" resizable="false" 
+                              width="500" showEffect="clip" hideEffect="hold" closable="false" >                
+
+                        <h:panelGrid id="display" columns="1" cellpadding="4">
+                            <p:fieldset legend="Estudiante">
+                                <h:panelGrid columns="4" style="border: hidden">
+                                    <p:outputLabel value="Ci: "/>
+                                    <p:inputText id="ci" value="#{estudianteController.selectedEstudiante.ci}"/>
+
+                                    <p:outputLabel value="Apellido: "/>
+                                    <p:inputText id="apellido" value="#{estudianteController.selectedEstudiante.apellido}"/>
+
+                                    <p:outputLabel value="Nombre:"/>
+                                    <p:inputText id="nombre" value="#{estudianteController.selectedEstudiante.nombre}"/>                                                               
+
+                                    <p:outputLabel value="Teléfono: "/>
+                                    <p:inputText id="telefono" value="#{estudianteController.selectedEstudiante.telefono}"/>
+
+                                    <p:outputLabel value="Email: "/>
+                                    <p:inputText id="email" value="#{estudianteController.selectedEstudiante.email}"/>
+
+                                    <p:outputLabel value="Dirección: "/>
+                                    <p:inputText id="direccion" value="#{estudianteController.selectedEstudiante.direccion}"/>                               
+
+                                    <p:outputLabel value="Fecha Nacimiento"/>                                
+                                    <p:calendar id="german" value="#{estudianteController.selectedEstudiante.fechaNacimiento}" locale="es" navigator="true" pattern="dd-MM-yyyy" mask="true" />
+                                    
+
+                                </h:panelGrid>
+                            </p:fieldset>
+                            
+                            <p:fieldset legend="Representante">
+                                <h:panelGrid columns="4" >
+                                    <p:outputLabel value="Ci: "/>
+                                    <p:inputText id="cirep" value="#{estudianteController.selectedRepresentante.ci}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Parentesco "/>
+                                    <p:inputText id="parentescorep" value="#{estudianteController.selectedRepresentante.parentesco}" style="width: 200px"/>                                
+
+                                    <p:outputLabel value="Apellido: "/>
+                                    <p:inputText id="apellidorep" value="#{estudianteController.selectedRepresentante.apellido}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Nombre:"/>
+                                    <p:inputText id="nombrerep" value="#{estudianteController.selectedRepresentante.nombre}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Teléfono: "/>
+                                    <p:inputText id="telefonorep" value="#{estudianteController.selectedRepresentante.telefono}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Dirección: "/>
+                                    <p:inputText id="direccionrep" value="#{estudianteController.selectedRepresentante.direccion}" style="width: 200px"/>
+
+                                    <p:outputLabel value="Email: "/>
+                                    <p:inputText id="emailrep" value="#{estudianteController.selectedRepresentante.email}" style="width: 200px"/>
+
+
+                                </h:panelGrid>
+                            </p:fieldset>
+
+
+                            <h:panelGrid columns="2">
+                                <p:commandButton  id="Guardar" update=":frmUpdate, :frmIngreso"  value="Guardar" action="#{estudianteController.updateEstudiante}"  />
+
+                                <p:commandButton id="Cancelar" update=":frmUpdate, :frmIngreso" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</html>

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        
+        <title>Index Administrador</title>
+        <style type="text/css">
+            .ui-widget,
+            .ui-widget .ui-widget
+            {
+                font-size: 85% !important;
+            }
+        </style>
+    </h:head>
+    <h:body onload="#{menuGeneralAdminController.reloadSession()}">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="100">  
+                <div style=" border:0; width: 100%; height: 100%; background-image: url(../images/banner2.png); background-position:  center"  
+                     class="ui-widget-content ui-corner-all">  
+
+                    <h:form id="logoutFrm" style="margin-left: 80%; padding-top: 3% ">
+                        <p:commandButton   ajax="false" id="logout" value="Salir" actionListener="#{loginBean.doLogout}" oncomplete="logout(xhr, status, args)" icon="ui-icon-power"/>
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30">
+                <h:outputText value="South unit content." />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Menú Principal" resizable="true" collapsible="true">
+                <h:form id="frmMenu">
+                    <p:menu style="width:200px">
+                        <p:submenu label="ADMINISTRACION">
+                            <p:menuitem value="Inicio" action="#{menuGeneralAdminController.goToIndexUsuarios}" ajax="false" icon="ui-icon-disk" />
+                            <p:menuitem value="Dependencias" action="#{menuGeneralAdminController.goToDependencias}" ajax="false" icon="ui-icon-disk" />
+                            <p:menuitem value="Usuarios" action="#{menuGeneralAdminController.goToUsuarios}" ajax="false" icon="ui-icon-disk" />
+                           
+                        </p:submenu>                                              
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <div style=" border:0; width: 99.8%; height: 99.7%; background-image: url(../images/bg4.png); background-position: top"  
+                    class="ui-widget-content ui-corner-all">
+                         
+                </div>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>
+

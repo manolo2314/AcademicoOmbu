@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        
+        <title>OMBUGAMES Evaluación</title>
+        <style type="text/css">
+            .ui-widget,
+            .ui-widget .ui-widget
+            {
+                font-size: 85% !important;
+            }
+        </style>
+    </h:head>
+    <h:body onload="#{menuLectivoController.reloadSession()}">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="80">  
+                <div style=" border:0; width: 100%; height: 100%; background-image: url(../images/logo.jpg); background-position:  center; background-repeat: no-repeat; background-size: 70px 70px;"  
+                     class="ui-widget-content ui-corner-all">  
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:outputLabel  value="UNIDAD EDUCATIVA CARLOS CISNEROS"/>
+                            <h:outputLabel  value="-------------------------------------------------------"/>
+                            <h:outputLabel  value="BIENVENID@: #{loginBean.loggedUserNombre}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:form id="logoutFrm" >
+                                <p:commandButton   ajax="false" id="logout" value="Salir" actionListener="#{loginBean.doLogout}" oncomplete="logout(xhr, status, args)" icon="ui-icon-power"/>
+                            </h:form>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30" >
+                <h:outputText style="margin-left: 50%" value="Developed By: OMBUGAMES CIA LTDA. All rights reserved &#169;2016" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Menú Principal" resizable="true" collapsible="true">
+                <h:form id="frmMenu" >
+                    <p:menu style="width:200px;  ">
+                       <p:submenu label="Administración">
+                           <p:menuitem value="Inicio" action="#{menuLectivoController.goToIndex}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                            <p:menuitem value="Año Lectivo" action="#{menuLectivoController.goToAnoLectivo}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />
+                            <p:menuitem value="Asignatura" action="#{menuLectivoController.goToNivel}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Docente" action="#{menuLectivoController.goToDocente}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Estudiante" action="#{menuLectivoController.goToEstudiante}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Evaluación" action="#{menuLectivoController.goToEvaluacion}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />  
+                            <p:menuitem value="Nivel" action="#{menuLectivoController.goToNivel}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Sección" action="#{menuLectivoController.goToSeccion()}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            
+                        </p:submenu>  
+                        <p:submenu label="Distribución">
+                            <p:menuitem value="Crear Distribución" action="#{menuLectivoController.goToRelacionPaquete}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                        <p:submenu label="Matrícula">
+                            <p:menuitem value="Crear Matrícula" action="#{menuLectivoController.goToRelacionMatricula}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                
+                <h:form id="frmIngreso">
+                    
+                    <p:growl id="growl1" showDetail="true" sticky="true" /> 
+                    <p:panel header="EVALUACION">
+                        <p:fieldset legend="Nuevo"  >
+                            <h:panelGrid columns="2" style="border: hidden; font-size: 12px" >
+
+                                <h:outputLabel value="Sección:"/>
+                                <p:selectOneMenu var="ss"  id="seccion" value="#{nivelController.selectedSeccion}"  converter="GenericConverter">
+                                    
+                                    <f:selectItem itemLabel="Escoger Sección" itemValue="" />
+                                    <f:selectItems value="#{nivelController.secciones}" var="sec"  itemLabel="#{sec.nombre}" itemValue="#{sec}"/>
+                                    <p:column>
+                                        <h:outputText value="#{ss.nombre}" />
+                                    </p:column>
+                                </p:selectOneMenu>
+                                
+                                <h:outputLabel value="Nivel:"/>
+                                <p:inputText value="#{nivelController.actualNivel.nombre}" style="width: 200px;"/>   
+                                <h:outputLabel value="Paralelo:"/>
+                                <p:inputText value="#{nivelController.actualNivel.paralelo}" style="width: 200px;"/>  
+                                <p:commandButton  value="Guardar" actionListener="#{nivelController.guardarNivel}"
+                                                  update=":frmIngreso" />
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </p:panel>
+                        <p:panel id="pnlIngresada" header="Nivels Existentes">
+                           
+                              
+                            <p:dataTable  var="table" value="#{nivelController.nivelModel}" style="width: 40%; margin: auto"
+                                          emptyMessage="No existen esas partidas" filteredValue="#{nivelController.filterNivel}" paginator="true" rows="10"
+                                              selection="#{nivelController.selectedNivel}" selectionMode="single" widgetVar="Tables">
+
+                                <p:ajax event="rowSelect" update=":frmUpdate:display" oncomplete="PF('msmDialog').show()" listener="#{nivelController.cargaSeccionModificar}" />
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="3" headerText="Dar clic  para Modificar"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column headerText="NIVEL" filterBy="#{table.nombre}" filterMatchMode="contains"/>   
+                                            <p:column headerText="PARALELO" filterBy="#{table.paralelo}" filterMatchMode="contains"/> 
+                                            <p:column headerText="SECCION" filterBy="#{table.nombreSeccion}" filterMatchMode="contains"/> 
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column  >
+                                        <h:outputText value="#{table.nombre}" />
+                                    </p:column>  
+                                    <p:column  >
+                                        <h:outputText value="#{table.paralelo}" />
+                                    </p:column>   
+                                    <p:column  >
+                                        <h:outputText value="#{table.nombreSeccion}" />
+                                    </p:column>    
+                                </p:dataTable>
+                         
+                        </p:panel>
+                  
+                </h:form>
+
+                <h:form id="frmUpdate">
+
+                    <p:dialog id="msmDialog" header="EVALUACION" widgetVar="msmDialog" resizable="false" 
+                              width="800" showEffect="clip" hideEffect="hold" closable="false" >                
+
+                        <h:panelGrid id="display" columns="1" cellpadding="4">
+
+                            <h:panelGrid columns="2" style="border: hidden">
+                                <h:outputLabel value="Sección:"/>
+                                <p:selectOneMenu var="sss"  id="seccionmod" value="#{nivelController.selectedSeccion}"  converter="GenericConverter">
+                                    
+                                    <f:selectItem itemLabel="Escoger Sección" itemValue="" />
+                                    <f:selectItems value="#{nivelController.secciones}" var="secc"  itemLabel="#{secc.nombre}" itemValue="#{secc}"/>
+                                    <p:column>
+                                        <h:outputText value="#{sss.nombre}" />
+                                    </p:column>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="Nivel:"/>
+                                <p:inputText value="#{nivelController.selectedNivel.nombre}" style="width: 200px;"/>
+                                <p:outputLabel value="Paralelo:"/>
+                                <p:inputText style="width: 250px;" id="nombre" value="#{nivelController.selectedNivel.paralelo}" />
+                                
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2">
+                                <p:commandButton id="Guardar" update=":frmUpdate, :frmIngreso"  value="Guardar" action="#{nivelController.updateNivel}" />
+
+                                <p:commandButton id="Cancelar" update=":frmUpdate, :frmIngreso" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+ 
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>

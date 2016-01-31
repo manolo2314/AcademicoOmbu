@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+
+        <title>OMBUGAMES Asignatura</title>
+        <style type="text/css">
+            .ui-widget,
+            .ui-widget .ui-widget
+            {
+                font-size: 85% !important;
+            }
+        </style>
+    </h:head>
+    <h:body onload="#{menuLectivoController.reloadSession()}">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="80">  
+                <div style=" border:0; width: 100%; height: 100%; background-image: url(../images/logo.jpg); background-position:  center; background-repeat: no-repeat; background-size: 70px 70px;"  
+                     class="ui-widget-content ui-corner-all">  
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:outputLabel  value="UNIDAD EDUCATIVA CARLOS CISNEROS"/>
+                            <h:outputLabel  value="-------------------------------------------------------"/>
+                            <h:outputLabel  value="BIENVENID@: #{loginBean.loggedUserNombre}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:form id="logoutFrm" >
+                                <p:commandButton   ajax="false" id="logout" value="Salir" actionListener="#{loginBean.doLogout}" oncomplete="logout(xhr, status, args)" icon="ui-icon-power"/>
+                            </h:form>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30" >
+                <h:outputText style="margin-left: 50%" value="Developed By: OMBUGAMES CIA LTDA. All rights reserved &#169;2016" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Menú Principal" resizable="true" collapsible="true">
+                <h:form id="frmMenu" >
+                    <p:menu style="width:200px;  ">
+                        <p:submenu label="Administración">
+                            <p:menuitem value="Inicio" action="#{menuLectivoController.goToIndex}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                            <p:menuitem value="Año Lectivo" action="#{menuLectivoController.goToAnoLectivo}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />
+                            <p:menuitem value="Asignatura" action="#{menuLectivoController.goToAsignatura}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Docente" action="#{menuLectivoController.goToDocente}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Estudiante" action="#{menuLectivoController.goToEstudiante}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Evaluación" action="#{menuLectivoController.goToEvaluacion}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />  
+                            <p:menuitem value="Nivel" action="#{menuLectivoController.goToNivel}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Sección" action="#{menuLectivoController.goToSeccion()}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            
+                        </p:submenu>  
+                        <p:submenu label="Distribución">
+                            <p:menuitem value="Crear Distribución" action="#{menuLectivoController.goToRelacionPaquete}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                        <p:submenu label="Matrícula">
+                            <p:menuitem value="Crear Matrícula" action="#{menuLectivoController.goToRelacionMatricula}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <h:form id="frmIngreso">
+                    <p:growl id="growl1" showDetail="true" sticky="true" /> 
+
+                    <p:panel header="ASIGNATURA">
+
+                        <p:fieldset legend="Nuevo" >
+                            <h:panelGrid columns="2" style="border: hidden; font-size: 12px" >
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Asignatura:"/>
+                                    <p:inputText value="#{asignaturaController.actualAsignatura.nombre}" style="width: 200px;"/>                               
+
+
+
+                                    <h:outputLabel value="Asignaturas Derivadas:" />
+                                    <p:selectOneRadio id="console" value="#{asignaturaController.derivada}" columns="1">
+                                        <f:selectItem itemLabel="Si" itemValue="1"  />
+                                        <f:selectItem itemLabel="No" itemValue="2" />
+
+                                        <p:ajax listener="#{asignaturaController.activarSubasignaturas}" update=":frmIngreso:pnlsub"/>
+                                    </p:selectOneRadio>
+
+
+
+
+                                    <p:commandButton  value="Guardar" actionListener="#{asignaturaController.guardarAsignatura}"
+                                                      update=":frmIngreso" />
+                                </h:panelGrid>
+
+                                <h:panelGroup id="pnlsub">
+                                    <p:fieldset legend="Subasignatura" rendered="#{asignaturaController.renderSubasignatura}">
+                                        <h:panelGrid columns="2" width="50%">
+                                            <h:outputLabel value="Nombre:"/>
+                                            <p:inputText value="#{asignaturaController.actualSubasignatura.nombre}" style="width: 200px;"/>
+
+                                            <p:commandButton  value="Agregar" actionListener="#{asignaturaController.agregarSubAsignatura}"
+                                                              update=":frmIngreso:pnlsub" />
+
+                                        </h:panelGrid>
+
+                                        <p:dataList style="float:left;margin-right:10px; width: 50%" value="#{asignaturaController.listaSubasignaturas}" var="sub" type="unordered" itemType="none" paginator="false"  rows="10" styleClass="paginated" >
+                                            <f:facet name="header">
+                                                SubAsignaturas
+                                            </f:facet>
+
+                                            <h:outputText value="#{sub.nombre}" style="display:inline-block; float: left; margin-right: 10px"/>
+                                            <p:commandLink update=":frmSubasignatura:detail" oncomplete="PF('dialog').show()" title="Ver Detalle" styleClass="ui-icon ui-icon-search" >
+                                                <f:setPropertyActionListener value="#{sub}" target="#{asignaturaController.selectedSubasignatura}" />
+                                                <h:outputText value="#{sub.nombre}" />
+                                            </p:commandLink>
+
+
+                                        </p:dataList>
+
+                                    </p:fieldset>
+                                </h:panelGroup>
+
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </p:panel>                                                            
+
+                    <p:panel id="pnlIngresada" header="Asignaturas Existentes">
+                        <p:dataTable  var="table" value="#{asignaturaController.asignaturaModel}" style="width: 30%; margin: auto"
+                                      emptyMessage="No existen esas partidas" filteredValue="#{asignaturaController.filterAsignatura}" paginator="true" rows="10"
+                                      selection="#{asignaturaController.selectedAsignatura}" selectionMode="single" widgetVar="Tables">
+
+                            <p:ajax event="rowSelect" update=":frmUpdate:display" oncomplete="PF('msmDialog').show()" listener="#{asignaturaController.cargaSubasignaturas}" />
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column colspan="1" headerText="Dar clic  para Modificar"/>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column headerText="ASIGNATURA" filterBy="#{table.nombre}" filterMatchMode="contains"/>                                           
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column  >
+                                <h:outputText value="#{table.nombre}" />
+                            </p:column>                                   
+                        </p:dataTable>
+
+                    </p:panel>
+                </h:form>
+
+                <h:form id="frmUpdate">
+
+                    <p:dialog id="msmDialog" header="ASIGNATURA" widgetVar="msmDialog" resizable="false" 
+                              width="400" showEffect="clip" hideEffect="hold" closable="false" >                
+
+                        <h:panelGrid id="display" columns="1" cellpadding="4">
+
+
+
+                            <h:panelGrid columns="1" style="border: hidden">
+                                <p:outputLabel value="Nombre:"/>
+                                <p:inputText style="width: 250px;" id="nombre" value="#{asignaturaController.selectedAsignatura.nombre}" />
+                            </h:panelGrid>
+
+                            <p:dataTable  var="tablesub" value="#{asignaturaController.subasignaturaModel}" style="width: 100%; margin: auto"
+                                          emptyMessage="No existen esas partidas"  paginator="true" rows="10" 
+                                          selection="#{asignaturaController.selectedSubasignatura}" selectionMode="single" widgetVar="Tablessub">
+
+                                    <p:ajax event="rowSelect"  update=":frmupdateSub:displaySub" oncomplete="PF('subDialog').show()" />
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText="SUB ASIGNATURAS (Dar clic  para Modificar)" />                                           
+                                        </p:row>
+                                        
+
+                                    </p:columnGroup>
+
+                                    <p:column >
+                                        <h:outputText value="#{tablesub.nombre}" />
+                                    </p:column>                                   
+                            </p:dataTable>
+
+                            <h:panelGrid columns="2">
+                                <p:commandButton id="Guardar" update=":frmUpdate, :frmIngreso"  value="Guardar" action="#{asignaturaController.updateAsignatura}" />
+
+                                <p:commandButton id="Cancelar" update=":frmUpdate, :frmIngreso" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="frmupdateSub">
+                    
+                    <p:dialog id="subDialog" header="SUBASIGNATURA" widgetVar="subDialog" resizable="false" 
+                              width="400" showEffect="clip" hideEffect="hold"  closable="false">                
+
+                        <h:panelGrid id="displaySub" columns="1" cellpadding="4">
+                            
+                            <h:panelGrid columns="1" style="border: hidden">
+                                <p:outputLabel value="Nombre:"/>
+                                <p:inputText style="width: 250px;" id="nombre" value="#{asignaturaController.selectedSubasignatura.nombre}" />
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2">
+                                <p:commandButton id="Guardar" update=":frmupdateSub , :frmUpdate:display"  value="Guardar" action="#{asignaturaController.updateSubAsignatura}" />
+                                <p:commandButton id="Cancelar" update=":frmupdateSub , :frmUpdate:display" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                
+                
+                
+                <h:form id="frmSubasignatura">
+                    <p:dialog header="SubAsignatura Info" widgetVar="dialog"  width="400"  showEffect="blind" hideEffect="explode" resizable="false">
+                        <h:panelGroup id="detail" >
+                            <h:panelGrid  columns="1" rendered="#{not empty asignaturaController.selectedSubasignatura}" columnClasses="label,value">
+                                <h:outputText value="Nombre:" />
+                                <p:inputText style="width: 250px;" id="nombre" value="#{asignaturaController.selectedSubasignatura.nombre}" />
+  
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="3">
+                                <p:commandButton id="Guardar" update=":frmSubasignatura, :frmIngreso:pnlsub"  value="Guardar"  />
+                                <p:commandButton id="Eliminar" update=":frmSubasignatura, :frmIngreso:pnlsub" value="Eliminar" actionListener="#{asignaturaController.eliminarSubasignatura}"/>
+                                <p:commandButton id="Cancelar" update=":frmSubasignatura, :frmIngreso:pnlsub" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </p:dialog>
+                </h:form>   
+
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+</html>

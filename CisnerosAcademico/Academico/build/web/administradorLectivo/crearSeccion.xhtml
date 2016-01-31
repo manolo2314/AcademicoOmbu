@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        
+        <title>OMBUGAMES Año Lectivo</title>
+        <style type="text/css">
+            .ui-widget,
+            .ui-widget .ui-widget
+            {
+                font-size: 85% !important;
+            }
+        </style>
+    </h:head>
+    <h:body onload="#{menuLectivoController.reloadSession()}">
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="80">  
+                <div style=" border:0; width: 100%; height: 100%; background-image: url(../images/logo.jpg); background-position:  center; background-repeat: no-repeat; background-size: 70px 70px;"  
+                     class="ui-widget-content ui-corner-all">  
+                    <h:panelGrid columns="2" width="100%">
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:outputLabel  value="UNIDAD EDUCATIVA CARLOS CISNEROS"/>
+                            <h:outputLabel  value="-------------------------------------------------------"/>
+                            <h:outputLabel  value="BIENVENID@: #{loginBean.loggedUserNombre}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin-left: 20%;">
+                            <h:form id="logoutFrm" >
+                                <p:commandButton   ajax="false" id="logout" value="Salir" actionListener="#{loginBean.doLogout}" oncomplete="logout(xhr, status, args)" icon="ui-icon-power"/>
+                            </h:form>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30" >
+                <h:outputText style="margin-left: 50%" value="Developed By: OMBUGAMES CIA LTDA. All rights reserved &#169;2016" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="west" size="200" header="Menú Principal" resizable="true" collapsible="true">
+                <h:form id="frmMenu" >
+                    <p:menu style="width:200px;  ">
+                       <p:submenu label="Administración">
+                           <p:menuitem value="Inicio" action="#{menuLectivoController.goToIndex}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                            <p:menuitem value="Año Lectivo" action="#{menuLectivoController.goToAnoLectivo}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />
+                            <p:menuitem value="Asignatura" action="#{menuLectivoController.goToAsignatura}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Docente" action="#{menuLectivoController.goToDocente}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Estudiante" action="#{menuLectivoController.goToEstudiante}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Evaluación" action="#{menuLectivoController.goToEvaluacion}" ajax="false" icon="ui-icon-disk" style="font-size: 12px" />  
+                            <p:menuitem value="Nivel" action="#{menuLectivoController.goToNivel}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            <p:menuitem value="Sección" action="#{menuLectivoController.goToSeccion()}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>  
+                            
+                        </p:submenu>  
+                        <p:submenu label="Distribución">
+                            <p:menuitem value="Crear Distribución" action="#{menuLectivoController.goToRelacionPaquete}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                        <p:submenu label="Matrícula">
+                            <p:menuitem value="Crear Matrícula" action="#{menuLectivoController.goToRelacionMatricula}" ajax="false" icon="ui-icon-disk" style="font-size: 12px"/>
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                
+                <h:form id="frmSeccion">
+                   <p:growl id="growl1" showDetail="true" sticky="true" /> 
+                    <p:panel header="SECCIÓN">
+                        <p:fieldset legend="Nuevo"  >
+                            <h:panelGrid columns="2" style="border: hidden; font-size: 12px" >
+                                <p:outputLabel value="Sección:"/>
+                                <p:inputText id="nombre" value="#{seccionController.actualSeccion.nombre}"/>
+                                
+                                <p:commandButton value="Guardar" actionListener="#{seccionController.guardarSeccion}"
+                                                 update=":frmSeccion"/>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </p:panel>
+                    
+                    
+                    <p:panel id="pnlSeccionIngresados" header="Secciones Existentes">
+                        <p:dataTable style="width: 30%; margin: auto" var="seccion" value="#{seccionController.seccionModel}"
+                                     emptyMessage="No existen datos" filteredValue="#{seccionController.filterSeccion}" paginator="true" rows="10"
+                                     selection="#{seccionController.selectedSeccion}" selectionMode="single" widgetVar="seccionTable">
+
+                                <p:ajax event="rowSelect" update=":frmUpdate:display" oncomplete="PF('seccionDialog').show()" />
+
+                                <p:columnGroup type="header">
+                                    <p:row>
+                                        <p:column colspan="1" headerText="Dar clic en la Sección para Modificarla"/>
+                                    </p:row>
+
+                                    <p:row>
+                                        <p:column headerText="SECCIÓN" filterBy="#{seccion.nombre}" filterMatchMode="contains"/>                                                                              
+                                    </p:row>
+                                </p:columnGroup>
+
+                                <p:column >
+                                    <h:outputText value="#{seccion.nombre}" />
+                                </p:column>
+                                                                
+                            </p:dataTable>
+                        </p:panel>
+                  
+                </h:form>
+                    
+                    
+                <h:form id="frmUpdate">
+                    <p:dialog id="seccionDialog" header="SECCIÓN" widgetVar="seccionDialog" resizable="false" 
+                              width="400" showEffect="clip" hideEffect="hold" closable="false" >                
+
+                        <h:panelGrid id="display" columns="1" cellpadding="4">
+
+                            <h:panelGrid columns="2" style="border: hidden">
+                                <p:outputLabel value="Nombre:"/>
+                                <p:inputText style="width: 250px;" id="nombre" value="#{seccionController.selectedSeccion.nombre}" />                                
+
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="2">
+                                <p:commandButton  id="Guardar" update=":frmUpdate, :frmSeccion"  value="Guardar" action="#{seccionController.updateSeccion}"  />
+
+                                <p:commandButton id="Cancelar" update=":frmUpdate, :frmSeccion" value="Cancelar"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+    
+</html>

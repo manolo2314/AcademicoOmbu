@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Sistema de Compras UNACH</title>
+        <style type="text/css">           
+            .ui-widget,.ui-widget .ui-widget {
+                font-size: 90% !important;
+            } 
+            .ui-layout-unit-content{background-image:url('#{request.contextPath}/images/logo.jpg'); background-repeat: no-repeat; background-position: top;  background-size: 200px 200px; width:100%}
+
+        </style>
+        
+    </h:head>
+    <h:body style="text-align:center">
+        <p:layout fullPage="true" style="background-color:#FFFFFF;">
+
+            <p:layoutUnit styleClass="layoutUnitCenter" position="center">
+                <p:growl id="mensajes" showDetail="true" life="2000" />
+                                
+                <h:form>
+                    <h:panelGrid columns="1" border="0" style="margin: auto">
+                        
+                        <p:panel header="Login" style="margin: 300px auto" >
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel for="username" value="Usuario:" />
+                                <p:inputText value="#{loginBean.nombre}" id="username"
+                                             label="username" size="15" />
+                                <h:outputLabel for="password" value="Clave:" />
+                                <p:password value="#{loginBean.clave}" id="password" 
+                                            label="password" size="15"/>
+                                <f:facet name="footer">
+                                    <h:panelGrid columns="2" border="0" width="100%">
+                                        
+                                        <p:commandButton id="loginButton" value="Login"
+                                                             actionListener="#{loginBean.doLogin}" update=":mensajes"
+                                                             oncomplete="manejarLogin(xhr, status, args)" icon="ui-icon-person"/>
+                                                                                                                          
+                                    </h:panelGrid>
+                                </f:facet>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        function manejarLogin(xhr, status, args) {
+            if (!args.validationFailed && args.estaLogeado) {
+                setTimeout(function() {
+                    window.location = args.view;
+                }, 500);
+            }
+        }
+        //]]>
+    </script>
+</html>
